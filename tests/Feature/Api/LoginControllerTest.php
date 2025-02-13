@@ -32,3 +32,16 @@ test('bad login should return HTTP 400', function () {
         ->assertJsonPath('message', 'Invalid credentials.')
         ->assertJsonPath('code', 'BAD_LOGIN');
 });
+
+
+test('user can login even if no transactions or balance', function(){
+
+    $user = User::factory()->create(['email' => 'test@test.com']);
+
+    postJson(action(LoginController::class), [
+        'email' => 'test@test.com',
+        'password' => 'password',
+        'device_name' => 'Feature test',
+    ])
+        ->assertStatus(201);
+});

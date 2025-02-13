@@ -10,8 +10,10 @@ class DashboardController
 {
     public function __invoke(Request $request)
     {
-        $transactions = $request->user()->wallet->transactions()->with('transfer')->orderByDesc('id')->get();
-        $balance = $request->user()->wallet->balance;
+        $userWallet = $request->user()->wallet;
+
+        $transactions = $userWallet ? $userWallet->transactions()->with('transfer')->orderByDesc('id')->get() : [];
+        $balance = $userWallet ? $userWallet->balance : 0;
 
         return view('dashboard', compact('transactions', 'balance'));
     }
